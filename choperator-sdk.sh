@@ -1,4 +1,6 @@
 #!/bin/sh
+export ARCH=$(case $(uname -m) in x86_64) echo -n amd64 ;; aarch64) echo -n arm64 ;; *) echo -n $(uname -m) ;; esac)
+export OS=$(uname | awk '{print tolower($0)}')
 clear
 echo " "
 echo " .d88b.  d8888b. d88888b d8888b.  .d8b.  d888888b  .d88b.  d8888b.        .d8888. d8888b. db   dD" 
@@ -24,17 +26,11 @@ if [[ $yesno == "y" || $yesno == "Y" ]]
 then
 	echo "Enter the release version you wish to download e.g. v0.15.2 ?"
 	read version
-	if [[ "$OSTYPE" == "linux-gnu" ]]
-	then
-	    echo "Linux detected"
-	    curl -LO https://github.com/operator-framework/operator-sdk/releases/download/${version}/operator-sdk-${version}-x86_64-linux-gnu
-	    chmod +x operator-sdk-${version}-x86_64-linux-gnu && sudo mkdir -p /opt/operator-sdk/$version && sudo cp operator-sdk-${version}-x86_64-linux-gnu /opt/operator-sdk/$version/operator-sdk && rm operator-sdk-${version}-x86_64-linux-gnu
-    elif [[ "$OSTYPE" == "darwin"* ]] 
-    then
-    	echo "Mac detected"
-    	curl -LO https://github.com/operator-framework/operator-sdk/releases/download/${version}/operator-sdk-${version}-x86_64-apple-darwin
-    	chmod +x operator-sdk-${version}-x86_64-apple-darwin && sudo mkdir -p /opt/operator-sdk/$version && sudo cp operator-sdk-${version}-x86_64-apple-darwin /opt/operator-sdk/$version/operator-sdk && rm operator-sdk-${version}-x86_64-apple-darwin
-    fi
+    export ARCH=$(case $(uname -m) in x86_64) echo -n amd64 ;; aarch64) echo -n arm64 ;; *) echo -n $(uname -m) ;; esac)
+	export OS=$(uname | awk '{print tolower($0)}')
+	export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${version}
+	curl -LO ${OPERATOR_SDK_DL_URL}/operator-sdk_${OS}_${ARCH}
+	chmod +x operator-sdk_${OS}_${ARCH} && sudo mkdir -p /opt/operator-sdk/$version && sudo mv operator-sdk_${OS}_${ARCH} /opt/operator-sdk/$version/operator-sdk 
 fi
 echo " "
 echo "########################################################################################"
