@@ -13,8 +13,10 @@ git clone https://github.com/austincunningham/change-operator-sdk.git
 cd change-operator-sdk
 # Set the file to be able to execute
 chmod +x choperator-sdk.sh 
-# run the script
+# Run the script
 ./choperator-sdk.sh
+# If you have versions of the operator-sdk on the system installed by this tool you can pass it in with cmd line args
+./choperator-sdk.sh v1.12.0
 ```
 ![](screenshot.png)
 
