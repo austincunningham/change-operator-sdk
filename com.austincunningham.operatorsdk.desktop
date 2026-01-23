@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Operator SDK Switcher
+Comment=Switch between Operator SDK versions
+Exec=python3 /home/austincunningham/repo/change-operator-sdk/main.py
+Icon=/home/austincunningham/repo/change-operator-sdk/icon.svg
+Terminal=false
+Type=Application
+Categories=Development;Utility;
+StartupWMClass=com.austincunningham.operatorsdk

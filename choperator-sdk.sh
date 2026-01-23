@@ -3,10 +3,21 @@
 # ./choperator-sdk.sh
 # You can pass in cmd line args as well
 # ./choperator-sdk.sh v1.12.0
+# For non-interactive download (used by GUI):
+# ./choperator-sdk.sh -d v1.32.0
 #
 export ARCH=$(case $(uname -m) in x86_64) echo -n amd64 ;; aarch64) echo -n arm64 ;; *) echo -n $(uname -m) ;; esac)
 export OS=$(uname | awk '{print tolower($0)}')
-version=$1
+
+# Check for -d flag (direct download, non-interactive)
+DIRECT_DOWNLOAD=false
+if [ "$1" = "-d" ]; then
+    DIRECT_DOWNLOAD=true
+    version=$2
+else
+    version=$1
+fi
+
 clear
 echo "########################################################################################################"
 echo " "
@@ -29,6 +40,30 @@ echo " "
 ls /opt/operator-sdk
 
 if [[ -z "$version" || -z "$versionCheck" ]]; then
+	# If direct download mode and version specified, download it
+	if [[ "$DIRECT_DOWNLOAD" == "true" && -n "$version" ]]; then
+		echo " "
+		echo "Downloading version $version..."
+		export OPERATOR_SDK_DL_URL=https://github.com/operator-framework/operator-sdk/releases/download/${version}
+		curl -LO ${OPERATOR_SDK_DL_URL}/operator-sdk_${OS}_${ARCH}
+		if [ ! -f "operator-sdk_${OS}_${ARCH}" ]; then
+			echo "Download failed - version may not exist on GitHub"
+			exit 1
+		fi
+		chmod +x operator-sdk_${OS}_${ARCH} && sudo mkdir -p /opt/operator-sdk/$version && sudo mv operator-sdk_${OS}_${ARCH} /opt/operator-sdk/$version/operator-sdk 
+		echo " "
+		echo "########################################################################################################"
+		sudo rm -f /usr/local/bin/operator-sdk
+		sudo ln -s /opt/operator-sdk/$version/operator-sdk /usr/local/bin/operator-sdk
+		echo "########################################################################################################"
+		echo "Version installed :"
+		echo " "
+		operator-sdk version
+		echo " "
+		echo "########################################################################################################"
+		exit 0
+	fi
+
 	echo " "
 	echo "Version not found "
 	echo "- You haven't specified a version"
@@ -48,7 +83,7 @@ if [[ -z "$version" || -z "$versionCheck" ]]; then
 		chmod +x operator-sdk_${OS}_${ARCH} && sudo mkdir -p /opt/operator-sdk/$version && sudo mv operator-sdk_${OS}_${ARCH} /opt/operator-sdk/$version/operator-sdk 
 		echo " "
 		echo "########################################################################################################"
-		sudo rm /usr/local/bin/operator-sdk
+		sudo rm -f /usr/local/bin/operator-sdk
 		sudo ln -s /opt/operator-sdk/$version/operator-sdk /usr/local/bin/operator-sdk
 		echo "########################################################################################################"
 		echo "Version installed :"
@@ -69,7 +104,7 @@ do
 	versionCheck=$(ls /opt/operator-sdk | grep "$version")
 done
 
-sudo rm /usr/local/bin/operator-sdk
+sudo rm -f /usr/local/bin/operator-sdk
 sudo ln -s /opt/operator-sdk/$version/operator-sdk /usr/local/bin/operator-sdk
 echo " "
 echo "########################################################################################################"
