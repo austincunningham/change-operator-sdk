@@ -316,7 +316,8 @@ class OperatorSDKApp(Adw.Application):
                 script_path = os.path.join(script_dir, "choperator-sdk.sh")
                 
                 # Run with pkexec for password prompt
-                command = ["pkexec", script_path, version]
+                # Use bash explicitly to avoid issues if script lacks execute permission
+                command = ["pkexec", "bash", script_path, version]
                 
                 try:
                     process = subprocess.Popen(
@@ -351,7 +352,8 @@ class OperatorSDKApp(Adw.Application):
         
         # Run with pkexec for password prompt
         # Use -d flag for direct download (non-interactive)
-        command = ["pkexec", script_path, "-d", version]
+        # Use bash explicitly to avoid issues if script lacks execute permission
+        command = ["pkexec", "bash", script_path, "-d", version]
         
         try:
             process = subprocess.Popen(
