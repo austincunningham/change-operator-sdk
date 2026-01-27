@@ -51,17 +51,19 @@ python3 main.py
 
 ### Installing to Desktop (Cinnamon/GNOME/etc.)
 
-To add the app to your application menu:
+To add the app to your application menu, run the install script:
 
 ```sh
-# Copy the desktop file
-cp com.austincunningham.operatorsdk.desktop ~/.local/share/applications/
-
-# Make it executable
-chmod +x ~/.local/share/applications/com.austincunningham.operatorsdk.desktop
+chmod +x install.sh
+./install.sh
 ```
 
 Then find "Operator SDK Switcher" in your application menu.
 
-![](change-operator-sdk.png)
+To uninstall:
 
+```sh
+./uninstall.sh
+```
+
+![](change-operator-sdk.png)
