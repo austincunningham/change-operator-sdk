@@ -25,8 +25,9 @@ Categories=Development;Utility;
 StartupWMClass=com.austincunningham.operatorsdk
 EOF
 
-# Make it executable
+# Make files executable
 chmod +x ~/.local/share/applications/com.austincunningham.operatorsdk.desktop
+chmod +x "$SCRIPT_DIR/choperator-sdk.sh"
 
 # Update desktop database (if available)
 if command -v update-desktop-database &> /dev/null; then
