@@ -66,6 +66,39 @@ class OperatorSDKApp(Adw.Application):
             windowcontrols button:hover {
                 background-color: #CC0000;
             }
+            /* Dropdown popover/menu styling */
+            popover, popover.menu {
+                background-color: #252542;
+                border-color: #3a3a5c;
+            }
+            popover contents {
+                background-color: #252542;
+            }
+            popover listview, popover list {
+                background-color: #252542;
+            }
+            popover row, popover listview row {
+                background-color: #252542;
+                color: white;
+            }
+            popover row:hover, popover listview row:hover {
+                background-color: #3a3a5c;
+            }
+            popover row:selected, popover listview row:selected {
+                background-color: #CC0000;
+                color: white;
+            }
+            dropdown popover listview row {
+                background-color: #252542;
+                color: white;
+                padding: 8px 12px;
+            }
+            dropdown popover listview row:hover {
+                background-color: #3a3a5c;
+            }
+            dropdown popover listview row:selected {
+                background-color: #CC0000;
+            }
         """)
         Gtk.StyleContext.add_provider_for_display(
             self.win.get_display(),
